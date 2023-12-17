@@ -24,7 +24,7 @@ class Game
       turn.start
 
       @scores = @players.map { |player| "#{player}: #{player.score}/#{@max_score}" }
-      p @scores
+      pp @scores
 
       current_player = next_player(current_player)
     end
