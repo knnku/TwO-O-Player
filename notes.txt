@@ -1,0 +1,9 @@
+Game - A game which will contain turns and will end if the score of a player is 3
+Turn(I/O) - 1 turn will be 1 question
+Player - Will be the users who play the game
+Question - A question that will be answered by the players
+Score - (STATE) Scores for each player who answers the question correctly
+
+
+Class and object structure
+Game - (Turn(question), Players(sc0re))
