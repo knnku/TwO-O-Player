@@ -3,17 +3,42 @@ class Game
 
   def initialize(player_count)
     @players = create_players(player_count)
-    @scores = @players.each_with_index { |p, i| @scores[i+1] = p.score} 
     print "\nNew game created with #{@players.length} players!\n\n"
-  end
-
-  def start
-    puts 'Game start!'
-    Turn.new(@players)
+    @max_score = 3
   end
 
   def create_players(num_of_players)
     (1..num_of_players).map.with_index { |_p, i| Player.new(i) }
+  end
+
+  def start
+    puts 'Game start!'
+    play_game
+  end
+
+  def play_game
+    current_player = @players.sample
+    
+
+    loop do
+      turn = Turn.new(current_player)
+      turn.start
+      @scores = @players.map { |player| "#{player}: #{player.score}/#{@max_score}"}
+
+      puts @scores
+      break if current_player.score >= @max_score
+
+      current_player = next_player(current_player)
+    end
+
+    puts "#{current_player} wins the game with a score of #{current_player.score}/#{@max_score}!"
+    puts "Good bye!"
+  end
+
+  def next_player(current_player)
+    current_index = @players.index(current_player)
+    next_index = (current_index + 1) % @players.length
+    @players[next_index]
   end
 end
 
@@ -26,7 +51,7 @@ class Player
   end
 
   def to_s
-    "Player #{@player_num + 1} (Score: #{@score})"
+    "Player #{@player_num + 1}"
   end
 end
 
@@ -45,24 +70,24 @@ class Question
   end
 end
 
-class Turn 
-  def initialize(players)
-    @current_player = players.sample
+class Turn
+  def initialize(player)
+    @current_player = player
     @current_question = Question.new(50)
     @answer = @current_question.answer
-  end 
+  end
 
-  def to_s
+  def start
     puts '------NEW TURN-------'
     puts "#{@current_player}: #{@current_question}"
-    answer = gets.chomp
+    user_answer = gets.chomp
 
-    if answer.to_i === @answer
+    if user_answer.to_i == @answer
       puts "#{@current_player} YES! You are correct."
-    else
-      puts "#{@current_player} Serously? No!"
+      @current_player.score += 1
+      return
     end
 
-  end 
-
+    puts "#{@current_player} Serously? No!"
+  end
 end
