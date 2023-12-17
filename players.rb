@@ -7,6 +7,6 @@ class Player
   end
 
   def to_s
-    "Player #{@player_num + 1} (Score: #{@score})"
+    "Player #{@player_num + 1}"
   end
 end
